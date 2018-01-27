@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Sequentially move the rows into a slice of floats.
-	floatData := make([]float64, 11*len(rawCSVData))
+	floatData := make([]float64, reader.FieldsPerRecord*len(rawCSVData))
 	var dataIndex int
 	for i, record := range rawCSVData {
 
@@ -55,10 +55,10 @@ func main() {
 	}
 
 	// Form the matrix.
-	m := mat.NewDense(len(rawCSVData), 11, floatData)
+	m := mat.NewDense(len(rawCSVData)-1, reader.FieldsPerRecord, floatData)
 
 	// Get the first 10 rows.
-	firstTen := m.Slice(0, 10, 0, 11)
+	firstTen := m.Slice(0, 10, 0, reader.FieldsPerRecord)
 
 	// As a sanity check, output the rows to standard out.
 	fMat := mat.Formatted(firstTen, mat.Prefix("    "))
